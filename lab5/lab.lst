@@ -1,0 +1,50 @@
+     1                                  SECTION .data
+     2 00000000 496E70757420737472-         text:	DB 'Input str:',10
+     3 00000009 3A0A               
+     4                                      textLen:	EQU $-text
+     5                                  
+     6                                  SECTION .bss
+     7 00000000 <res 00000050>              input:	RESB 80
+     8                                  
+     9                                  SECTION .text
+    10                                      GLOBAL _start
+    11                                  
+    12                                  _start:
+    13 00000000 B804000000                  mov eax,4
+    14 00000005 BB01000000                  mov ebx,1
+    15 0000000A B9[00000000]                mov ecx,text
+    16 0000000F BA0B000000                  mov edx,textLen
+    17 00000014 CD80                        int 80h
+    18                                  
+    19 00000016 B803000000                  mov eax,3
+    20 0000001B BB00000000                  mov ebx,0
+    21 00000020 B9[00000000]                mov ecx,input
+    22 00000025 BA50000000                  mov edx,80
+    23 0000002A CD80                        int 80h
+    24                                  
+    25 0000002C BE[00000000]                mov esi,input
+    26 00000031 B900000000                  mov ecx,0
+    27                                  
+    28                                  lp:
+    29 00000036 8A1C0E                      mov bl,[esi+ecx]
+    30 00000039 80FB0A                      cmp bl,10
+    31 0000003C 7405                        je quit
+    32 0000003E 6653                        push bx
+    33 00000040 41                          inc ecx
+    34 00000041 EBF3                        jmp lp
+    35                                  
+    36                                  quit:
+    37 00000043 665B                        pop bx
+    38 00000045 881E                        mov [esi],bl
+    39 00000047 46                          inc esi
+    40 00000048 E2F9                        loop quit
+    41                                  
+    42 0000004A B804000000                  mov eax,4
+    43 0000004F BB01000000                  mov ebx,1
+    44 00000054 B9[00000000]                mov ecx,input
+    45 00000059 BA50000000                  mov edx,80
+    46 0000005E CD80                        int 80h
+    47                                  
+    48 00000060 B801000000                  mov eax,1
+    49 00000065 BB00000000                  mov ebx,0
+    50 0000006A CD80                        int 80h
